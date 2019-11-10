@@ -111,7 +111,7 @@ public class EventControllerTest {
 
     @Test
     @TestDescription("입력값이 이상할때 에러가 발생하는 테스트")
-    public void 입력값이이상할때() throws Exception {
+    public void test() throws Exception {
 
         EventDto eventDto = EventDto.builder()
                 .name("Spring")
@@ -129,7 +129,13 @@ public class EventControllerTest {
         this.mockMvc.perform(post("/api/events")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(this.objectMapper.writeValueAsString(eventDto)))
-                .andExpect(status().isBadRequest());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].objectName").exists())
+                .andExpect(jsonPath("$[0].code").exists())
+                .andExpect(jsonPath("$[0].defaultMessage").exists())
+
+        ;
 
     }
 
