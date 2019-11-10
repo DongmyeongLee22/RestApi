@@ -2,6 +2,7 @@ package me.sun.restapi.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sun.restapi.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,7 @@ public class EventControllerTest {
     ObjectMapper objectMapper;
 
     @Test
+    @TestDescription("정상적으로 이벤트를 생성하는 테스트")
     public void createEvent() throws Exception {
 
         EventDto event = EventDto.builder()
@@ -64,6 +66,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력 받을 수 없는 값을 사용한 경우에 에러가 발생하는 테스트")
     public void createEvent_Bad_Request() throws Exception {
 
         Event event = Event.builder()
@@ -95,6 +98,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 비어 있을때 에러가 발생하는 테스트")
     public void 입력값이비어있을때() throws Exception {
         EventDto eventDto = EventDto.builder().build();
 
@@ -106,6 +110,7 @@ public class EventControllerTest {
     }
 
     @Test
+    @TestDescription("입력값이 이상할때 에러가 발생하는 테스트")
     public void 입력값이이상할때() throws Exception {
 
         EventDto eventDto = EventDto.builder()
