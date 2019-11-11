@@ -3,7 +3,6 @@ package me.sun.restapi.events;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sun.restapi.common.TestDescription;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +58,8 @@ public class EventControllerTest {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
                 .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()));
 
     }
@@ -111,7 +110,7 @@ public class EventControllerTest {
 
     @Test
     @TestDescription("입력값이 이상할때 에러가 발생하는 테스트")
-    public void test() throws Exception {
+    public void 입력값이이상할때() throws Exception {
 
         EventDto eventDto = EventDto.builder()
                 .name("Spring")

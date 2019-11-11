@@ -30,6 +30,72 @@ public class EventTest {
 
         }
 
+    @Test
+    public void testFree() throws Exception {
+        //given
+        Event event = Event.builder()
+                .basePrice(0)
+                .maxPrice(0)
+                .build();
+
+        //when
+        event.update();
+
+        //then
+        assertThat(event.isFree()).isTrue();
+
+        //given
+        event = Event.builder()
+                .basePrice(100)
+                .maxPrice(0)
+                .build();
+
+        //when
+        event.update();
+
+        //then
+        assertThat(event.isFree()).isFalse();
+
+        //given
+        event = Event.builder()
+                .basePrice(0)
+                .maxPrice(100)
+                .build();
+
+        //when
+        event.update();
+
+        //then
+        assertThat(event.isFree()).isFalse();
+    }
+
+    @Test
+    public void testOffine() throws Exception {
+        //given
+        Event event = Event.builder()
+                .location("장소")
+                .build();
+
+        //when
+        event.update();
+
+        //then
+        assertThat(event.isOffline()).isTrue();
+
+        //given
+        event = Event.builder()
+                .build();
+
+        //when
+        event.update();
+
+        //then
+        assertThat(event.isOffline()).isFalse();
+    }
+
+
+
+
 
 
 }
