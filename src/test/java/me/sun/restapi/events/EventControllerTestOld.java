@@ -2,7 +2,9 @@ package me.sun.restapi.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sun.restapi.common.BaseControllerTest;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,7 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
-public class EventControllerTestOld {
+@Ignore
+public class EventControllerTestOld extends BaseControllerTest {
 
     @Autowired
     MockMvc mockMvc;
