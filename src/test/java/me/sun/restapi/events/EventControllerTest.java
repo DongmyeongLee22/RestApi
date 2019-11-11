@@ -2,20 +2,30 @@ package me.sun.restapi.events;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.sun.restapi.common.RestDocsConfiguration;
 import me.sun.restapi.common.TestDescription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.headers.HeaderDocumentation;
+import org.springframework.restdocs.hypermedia.HypermediaDocumentation;
+import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 public class EventControllerTest {
 
     @Autowired
@@ -64,6 +76,53 @@ public class EventControllerTest {
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.query-events").exists())
                 .andExpect(jsonPath("_links.update-event").exists())
+                .andDo(document("create-event",
+                        links(
+                                linkWithRel("self").description("link to self"),
+                                linkWithRel("query-events").description("link to query events"),
+                                linkWithRel("update-event").description("link to upadte event")
+                        ),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.ACCEPT).description("accept header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("content type header")
+                        ),
+                        requestFields(
+                                fieldWithPath("name").description("Nmae of new evnet"),
+                                fieldWithPath("description").description("description of new evnet"),
+                                fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new evnet"),
+                                fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new evnet"),
+                                fieldWithPath("beginEventDateTime").description("beginEventDateTime of new evnet"),
+                                fieldWithPath("endEventDateTime").description("endEventDateTime of new evnet"),
+                                fieldWithPath("basePrice").description("basePrice of new evnet"),
+                                fieldWithPath("maxPrice").description("maxPrice of new evnet"),
+                                fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new evnet"),
+                                fieldWithPath("location").description("location of new evnet")
+                        ),
+                        responseHeaders(
+                                headerWithName(HttpHeaders.LOCATION).description("Location header"),
+                                headerWithName(HttpHeaders.CONTENT_TYPE).description("Content Type")
+                        ),
+                        //relaxed를 사용하면 필드의 모든 값을 안써도 되지만 그렇기 때문에 정확한 문서를 생성하지 못한다.
+                        responseFields(
+                                fieldWithPath("id").description("id of new evnet"),
+                                fieldWithPath("name").description("Nmae of new evnet"),
+                                fieldWithPath("description").description("description of new evnet"),
+                                fieldWithPath("beginEnrollmentDateTime").description("beginEnrollmentDateTime of new evnet"),
+                                fieldWithPath("closeEnrollmentDateTime").description("closeEnrollmentDateTime of new evnet"),
+                                fieldWithPath("beginEventDateTime").description("beginEventDateTime of new evnet"),
+                                fieldWithPath("endEventDateTime").description("endEventDateTime of new evnet"),
+                                fieldWithPath("basePrice").description("basePrice of new evnet"),
+                                fieldWithPath("maxPrice").description("maxPrice of new evnet"),
+                                fieldWithPath("limitOfEnrollment").description("limitOfEnrollment of new evnet"),
+                                fieldWithPath("location").description("location of new evnet"),
+                                fieldWithPath("free").description("free of new evnet"),
+                                fieldWithPath("offline").description("offline of new evnet"),
+                                fieldWithPath("eventStatus").description("envet status"),
+                                fieldWithPath("_links.self.href").description("link to self"),
+                                fieldWithPath("_links.query-events.href").description("link to query-events"),
+                                fieldWithPath("_links.update-event.href").description("link to update-event")
+                        )
+                ))
         ;
 
 
