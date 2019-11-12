@@ -3,6 +3,7 @@ package me.sun.restapi.config;
 import me.sun.restapi.account.Account;
 import me.sun.restapi.account.AccountRole;
 import me.sun.restapi.account.AccountService;
+import me.sun.restapi.common.AppProperties;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -33,12 +34,21 @@ public class AppConfig {
             @Autowired
             AccountService accountService;
 
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
+                saveAccount(appProperties.getAdminUsername(), appProperties.getAdminPassword()
+                        , AccountRole.ADMIN, AccountRole.USER);
+                saveAccount(appProperties.getUserUsername(), appProperties.getUserPassword(), AccountRole.USER);
+            }
+
+            private void saveAccount(String username, String password, AccountRole... roles) {
                 Account account = Account.builder()
-                        .email("dongmyeong@gmail.com")
-                        .password("dongmyeong")
-                        .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
+                        .email(username)
+                        .password(password)
+                        .roles(Set.of(roles))
                         .build();
 
                 accountService.saveAccount(account);

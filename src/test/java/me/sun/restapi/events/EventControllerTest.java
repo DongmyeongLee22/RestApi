@@ -5,6 +5,7 @@ import me.sun.restapi.account.Account;
 import me.sun.restapi.account.AccountRepository;
 import me.sun.restapi.account.AccountRole;
 import me.sun.restapi.account.AccountService;
+import me.sun.restapi.common.AppProperties;
 import me.sun.restapi.common.BaseControllerTest;
 import me.sun.restapi.common.TestDescription;
 import org.junit.Before;
@@ -40,6 +41,9 @@ public class EventControllerTest extends BaseControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
 
     @Before
     public void setUp() {
@@ -140,23 +144,19 @@ public class EventControllerTest extends BaseControllerTest {
 
     private String getAccessToken() throws Exception {
         //given
-        String username = "dongmyeo2ng@gmail.com";
-        String password = "dongmyeong";
         Account account = Account.builder()
-                .email(username)
-                .password(password)
+                .email(appProperties.getAdminUsername())
+                .password(appProperties.getAdminPassword())
                 .roles(Set.of(AccountRole.ADMIN, AccountRole.USER))
                 .build();
 
         this.accountService.saveAccount(account);
 
-        String clientId = "myApp";
-        String clientSecret = "pass";
 
         ResultActions perform = this.mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getAdminUsername())
+                .param("password", appProperties.getAdminPassword())
                 .param("grant_type", "password"));
 
         var responseBody = perform.andReturn().getResponse().getContentAsString();
