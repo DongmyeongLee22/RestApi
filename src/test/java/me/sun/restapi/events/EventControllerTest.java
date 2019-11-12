@@ -47,8 +47,8 @@ public class EventControllerTest extends BaseControllerTest {
 
     @Before
     public void setUp() {
-        this.accountRepository.deleteAll();
         this.eventRepository.deleteAll();
+        this.accountRepository.deleteAll();
     }
 
     @Test
@@ -239,6 +239,29 @@ public class EventControllerTest extends BaseControllerTest {
                 .andExpect(jsonPath("_links.index").exists())
         ;
 
+    }
+
+    @Test
+    @TestDescription("인증정보가 있는 유저가 이벤트를 조회할때")
+    public void queryEventsWithAythentication() throws Exception {
+        //given
+        IntStream.range(0, 30).forEach(this::generateEvent);
+
+        //when&then
+        this.mockMvc.perform(get("/api/events")
+                .header(HttpHeaders.AUTHORIZATION, getBearerToken())
+                .param("page", "1")
+                .param("size", "10")
+                .param("sort", "name,DESC"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("page").exists())
+                .andExpect(jsonPath("_embedded.eventList[0]._links.self").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andExpect(jsonPath("_links.create-event").exists())
+                .andDo(document("query-events"))
+        ;
     }
 
     @Test
