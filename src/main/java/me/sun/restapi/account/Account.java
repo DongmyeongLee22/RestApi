@@ -17,7 +17,7 @@ public class Account {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private Integer id;
 
     @Column(unique = true)
     private String email;

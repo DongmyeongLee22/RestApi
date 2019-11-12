@@ -41,6 +41,7 @@ public class AppConfig {
             public void run(ApplicationArguments args) throws Exception {
                 saveAccount(appProperties.getAdminUsername(), appProperties.getAdminPassword()
                         , AccountRole.ADMIN, AccountRole.USER);
+
                 saveAccount(appProperties.getUserUsername(), appProperties.getUserPassword(), AccountRole.USER);
             }
 

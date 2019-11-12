@@ -1,9 +1,11 @@
 package me.sun.restapi.config;
 
+import me.sun.restapi.account.AccountRepository;
 import me.sun.restapi.account.AccountService;
 import me.sun.restapi.common.AppProperties;
 import me.sun.restapi.common.BaseControllerTest;
 import me.sun.restapi.common.TestDescription;
+import me.sun.restapi.events.EventRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +23,14 @@ public class AuthServerConfigTest extends BaseControllerTest {
 
     @Autowired
     AppProperties appProperties;
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @Autowired
+    EventRepository eventRepository;
+
+
     @Test
     @TestDescription("인증 토큰을 발급 받는 테스트")
     public void getAuthToken() throws Exception {

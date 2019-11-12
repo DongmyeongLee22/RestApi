@@ -59,7 +59,7 @@ public class EventController {
         ControllerLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(savedEvent.getId());
         URI uri = selfLinkBuilder.toUri();
         EventResource eventResource = new EventResource(event);
-
+        //EventResourceOne eventResource = new EventResourceOne(new EventOne(event));
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-event"));
         eventResource.add(new Link("/docs/index.html#resources-events-create").withRel("profile"));

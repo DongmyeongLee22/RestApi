@@ -52,9 +52,7 @@ public class AccountServiceTest {
         //when
 
         //then
-        assertThat(this.passwordEncoder.matches(password, userDetails.getPassword()));
-        System.out.println(password);
-        System.out.println(userDetails.getPassword());
+        assertThat(this.passwordEncoder.matches(password, userDetails.getPassword())).isTrue();
     }
 
     @Test(expected = UsernameNotFoundException.class)
