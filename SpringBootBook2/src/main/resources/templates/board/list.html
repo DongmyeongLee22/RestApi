@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" th:href="@{/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <title>Board From</title>
+</head>
+<body>
+
+<!-- SECTION: HEADER
+====================================================================== -->
+<div th:fragment="header">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button aria-expanded="false" class="navbar-toggle collapsed"
+                        data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/" style="text-decoration:none;">
+                    <img class="img-rounded" style="display:inline-block;height:100%;margin-right:5px"
+                         th:src="@{/images/spring_boot_gray.png}"/>
+                    <span style="vertical-align:middle;">SpringBoot Community Web</span>
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/logout">LOGOUT</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- SECTION: HEADER -->
+
+<div class="container">
+    <div class="page-header">
+        <h1>게시글 목록</h1>
+    </div>
+    <div class="pull-right" style="width: 100px; margin: 10px 0;">
+        <a class="btn btn-primary btn-block" href="/board">등록</a>
+    </div>
+    <br><br><br>
+
+    <div class="mainHide">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class="col-md-1">#</th>
+                <th class="col-md-2">서비스 분류</th>
+                <th class="col-md-5">제목</th>
+                <th class="col-md-2">작성 날짜</th>
+                <th class="col-md-2">수정 날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board : ${boardList}">
+                <td th:text="${board.id}"></td>
+                <td th:text="${board.boardType.value}"></td>
+                <td><a th:href="'/board?id=' + ${board.id}" th:text="${board.title}"></a></td>
+                <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(board.lastModifiedDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="Page navigation" style="text-align: center">
+        <ul class="pagination"
+            th:with="startNumber=${T(Math).floor(boardList.number/10)}*10+1,
+                    endNumber=(${boardList.totalPages} > ${startNumber} + 9) ?
+                     ${startNumber} + 9 : ${boardList.totalPages}">
+            <li><a href="/board/list?page=1">&laquo;</a></li>
+            <li th:style="${boardList.first} ? 'display:none'">
+                <a th:href="@{/board/list(page=${boardList.number})}">&lsaquo;</a>
+            </li>
+            <li th:class="(${page} == ${boardList.number} + 1) ? 'active'"
+                th:each="page :${#numbers.sequence(startNumber, endNumber)}">
+                <a th:href="@{/board/list(page=${page})}" th:text="${page}">
+                    <span class="sr-only"></span>
+                </a>
+            </li>
+            <li th:style="${boardList.last} ? 'display:none'">
+                <a th:href="@{/board/list(page=${boardList.Number}+2)}">&rsaquo;</a>
+            </li>
+            <li>
+                <a th:href="@{/board/list(page=${boardList.totalPages})}">&raquo;</a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+
+<!-- SECTION: FOOTER
+====================================================================== -->
+<div th:fragment="footer">
+    <footer class="footer">
+        <div class="container">
+            <p>Copyright 2017 young891221. All Right Reserved. Designed by ssosso</p>
+        </div>
+    </footer>
+</div>
+<!-- SECTION: FOOTER -->
+</body>
+</html>
